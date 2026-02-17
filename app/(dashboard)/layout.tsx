@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Dashboard - Rental Management',
@@ -97,9 +98,12 @@ export default async function DashboardLayout({
           <div className='absolute bottom-0 left-0 right-0 p-6 border-t border-slate-800 bg-slate-900'>
             <div className='flex items-center justify-between'>
               <div className='text-sm text-slate-400'>
-                <p className='font-medium text-white'>
+                <Link
+                  href={`/dashboard/employees/${user.id}`}
+                  className='font-medium text-white hover:underline truncate block'
+                >
                   {profile?.full_name || user.email}
-                </p>
+                </Link>
                 <p className='text-xs mt-1 capitalize'>
                   {profile?.role.replace('_', ' ').toLowerCase()}
                 </p>

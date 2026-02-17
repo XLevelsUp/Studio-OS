@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -76,26 +78,45 @@ export default async function DashboardPage() {
             Get started with your rental management system
           </CardDescription>
         </CardHeader>
+
         <CardContent className='space-y-4'>
-          <div>
-            <h3 className='font-semibold mb-2'>1. Add Equipment</h3>
-            <p className='text-sm text-slate-600'>
-              Go to Equipment section to add your camera gear, lenses, and other
-              rental items.
-            </p>
+          <div className='flex items-center justify-between'>
+            <div>
+              <h3 className='font-semibold mb-1'>1. Add Equipment</h3>
+              <p className='text-sm text-slate-600'>
+                Add gear to your inventory.
+              </p>
+            </div>
+            <Link href='/dashboard/equipment/new'>
+              <Button size='sm' variant='secondary'>
+                Add Items
+              </Button>
+            </Link>
           </div>
-          <div>
-            <h3 className='font-semibold mb-2'>2. Register Clients</h3>
-            <p className='text-sm text-slate-600'>
-              Add client information in the Clients section for quick rental
-              processing.
-            </p>
+          <div className='flex items-center justify-between'>
+            <div>
+              <h3 className='font-semibold mb-1'>2. Register Clients</h3>
+              <p className='text-sm text-slate-600'>Add client details.</p>
+            </div>
+            <Link href='/dashboard/clients/new'>
+              <Button size='sm' variant='secondary'>
+                Add Client
+              </Button>
+            </Link>
           </div>
-          <div>
-            <h3 className='font-semibold mb-2'>3. Create Rentals</h3>
-            <p className='text-sm text-slate-600'>
-              Start creating rentals by selecting clients and equipment items.
-            </p>
+          <div className='flex items-center justify-between'>
+            <div>
+              <h3 className='font-semibold mb-1'>3. Create Rentals</h3>
+              <p className='text-sm text-slate-600'>
+                Start a new rental order.
+              </p>
+            </div>
+            {/* Link to Rentals page for now as Create flow is pending */}
+            <Link href='/dashboard/rentals'>
+              <Button size='sm' variant='secondary'>
+                View Rentals
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

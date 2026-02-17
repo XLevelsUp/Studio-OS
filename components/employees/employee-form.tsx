@@ -1,0 +1,264 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { createEmployee, updateEmployee } from '@/actions/employees';
+import {
+  createEmployeeSchema,
+  updateEmployeeSchema,
+} from '@/lib/validations/employees';
+
+// Combined schema for form logic, though server actions use separate schemas
+// We need to handle password being optional for updates
+const formSchema = z.object({
+  full_name: z.string().min(1, 'Full name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().optional(), // Allow empty string to be handled in refine or check
+  role: z.enum(['SUPER_ADMIN', 'ADMIN', 'STAFF']),
+  branch_id: z.string().optional(), // Removed uuid() to allow "no_branch" or empty
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+interface Branch {
+  id: string;
+  name: string;
+}
+
+interface EmployeeFormProps {
+  initialData?: any; // Using any for simplicity as it matches database shape
+  branches: Branch[];
+  isEditing?: boolean;
+}
+
+export function EmployeeForm({
+  initialData,
+  branches,
+  isEditing = false,
+}: EmployeeFormProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      full_name: initialData?.full_name || '',
+      email: initialData?.email || '',
+      role: initialData?.role || 'STAFF',
+      branch_id: initialData?.branch_id || 'no_branch',
+      password: '',
+    },
+  });
+
+  async function onSubmit(data: FormValues) {
+    setIsLoading(true);
+    setError(null);
+
+    const branchId =
+      data.branch_id === 'no_branch' || !data.branch_id ? null : data.branch_id;
+
+    try {
+      if (isEditing) {
+        // Update
+        // Remove email and password from update payload as current action implementation might not support them or they are separate
+        // Our updateEmployee action supports: full_name, role, branch_id
+        const updatePayload = {
+          full_name: data.full_name,
+          role: data.role,
+          branch_id: branchId,
+        };
+
+        const result = await updateEmployee(initialData.id, updatePayload);
+
+        if (result.error) {
+          setError(result.error);
+        } else {
+          router.push('/dashboard/employees');
+          router.refresh();
+        }
+      } else {
+        // Create
+        if (!data.password) {
+          setError('Password is required for new employees');
+          setIsLoading(false);
+          return;
+        }
+
+        const createPayload = {
+          email: data.email,
+          password: data.password,
+          full_name: data.full_name,
+          role: data.role,
+          branch_id: branchId || undefined, // undefined allows optional to pass Zod if schema expects optional
+        };
+
+        const result = await createEmployee(createPayload);
+
+        if (result.error) {
+          setError(result.error);
+        } else {
+          router.push('/dashboard/employees');
+          router.refresh();
+        }
+      }
+    } catch (e) {
+      setError('An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        {error && (
+          <div className='p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md'>
+            {error}
+          </div>
+        )}
+
+        <FormField
+          control={form.control}
+          name='full_name'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Name</FormLabel>
+              <FormControl>
+                <Input placeholder='John Doe' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                {/* Email is typically immutable after creation in simple systems, or requires auth change flow */}
+                <Input
+                  placeholder='john@example.com'
+                  {...field}
+                  disabled={isEditing}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {!isEditing && (
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type='password' placeholder='******' {...field} />
+                </FormControl>
+                <FormDescription>At least 6 characters.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <FormField
+            control={form.control}
+            name='role'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Select a role' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value='STAFF'>Staff (Employee)</SelectItem>
+                    <SelectItem value='ADMIN'>
+                      Admin (Studio Manager)
+                    </SelectItem>
+                    <SelectItem value='SUPER_ADMIN'>Super Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Determines access permissions.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='branch_id'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Branch</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value || undefined}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Select a branch' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value='no_branch'>No Branch / HQ</SelectItem>
+                    {branches.map((branch) => (
+                      <SelectItem key={branch.id} value={branch.id}>
+                        {branch.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Button type='submit' disabled={isLoading}>
+          {isLoading
+            ? 'Saving...'
+            : isEditing
+              ? 'Update Employee'
+              : 'Create Employee'}
+        </Button>
+      </form>
+    </Form>
+  );
+}

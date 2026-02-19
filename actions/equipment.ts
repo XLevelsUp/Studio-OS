@@ -6,16 +6,15 @@ import { equipmentSchema } from '@/lib/validations/schemas';
 import type { Database } from '@/lib/database.types';
 
 type Equipment = Database['public']['Tables']['equipment']['Row'];
-type EquipmentInsert = Database['public']['Tables']['equipment']['Insert'];
-type EquipmentUpdate = Database['public']['Tables']['equipment']['Update'];
 
-// Get all equipment
+// Get all equipment — excludes soft-deleted rows
 export async function getEquipment() {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('equipment')
     .select('*, categories(name), branches(name)')
+    .is('deletedAt', null)
     .order('createdAt', { ascending: false });
 
   if (error) {
@@ -55,13 +54,17 @@ export async function createEquipment(formData: FormData) {
     description: (formData.get('description') as string) || null,
   };
 
-  // Validate
   const validatedData = equipmentSchema.parse(rawData);
 
   const { data, error } = await supabase
     .from('equipment')
     .insert({
-      ...validatedData,
+      name: validatedData.name,
+      serialNumber: validatedData.serialNumber,
+      categoryId: validatedData.categoryId,
+      branchId: validatedData.branchId,
+      rentalPrice: validatedData.rentalPrice,
+      description: validatedData.description,
       status: 'AVAILABLE',
     })
     .select()
@@ -88,12 +91,18 @@ export async function updateEquipment(id: string, formData: FormData) {
     description: (formData.get('description') as string) || null,
   };
 
-  // Validate
   const validatedData = equipmentSchema.parse(rawData);
 
   const { data, error } = await supabase
     .from('equipment')
-    .update(validatedData)
+    .update({
+      name: validatedData.name,
+      serialNumber: validatedData.serialNumber,
+      categoryId: validatedData.categoryId,
+      branchId: validatedData.branchId,
+      rentalPrice: validatedData.rentalPrice,
+      description: validatedData.description,
+    })
     .eq('id', id)
     .select()
     .single();
@@ -110,7 +119,13 @@ export async function updateEquipment(id: string, formData: FormData) {
 // Update equipment status
 export async function updateEquipmentStatus(
   id: string,
-  status: 'AVAILABLE' | 'RENTED' | 'MAINTENANCE' | 'LOST',
+  status:
+    | 'AVAILABLE'
+    | 'IN_USE'
+    | 'MAINTENANCE'
+    | 'RETIRED'
+    | 'LOST'
+    | 'RENTED',
 ) {
   const supabase = await createClient();
 
@@ -130,17 +145,49 @@ export async function updateEquipmentStatus(
   return data;
 }
 
-// Delete equipment
+// Soft-delete equipment — sets deletedAt, does NOT remove the row
 export async function deleteEquipment(id: string) {
   const supabase = await createClient();
 
-  const { error } = await supabase.from('equipment').delete().eq('id', id);
+  const { error } = await supabase
+    .from('equipment')
+    .update({ deletedAt: new Date().toISOString() })
+    .eq('id', id);
 
   if (error) {
     throw new Error(`Failed to delete equipment: ${error.message}`);
   }
 
   revalidatePath('/dashboard/equipment');
+}
+
+// Chain of custody: get all assignment history for a piece of equipment
+export async function getEquipmentAssignmentHistory(equipmentId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('assignment_history')
+    .select(
+      `
+      id,
+      assignedAt,
+      returnedAt,
+      location,
+      notes,
+      orderId,
+      assignedTo:profiles!assignment_history_assignedTo_fkey(id, fullName, email),
+      assignedBy:profiles!assignment_history_assignedBy_fkey(id, fullName)
+    `,
+    )
+    .eq('equipmentId', equipmentId)
+    .order('assignedAt', { ascending: false });
+
+  if (error) {
+    console.warn('[assignment_history] Query failed:', error.message);
+    return [];
+  }
+
+  return data ?? [];
 }
 
 // Get all categories (for dropdowns)

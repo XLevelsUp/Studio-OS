@@ -34,7 +34,11 @@ import {
 const formSchema = z.object({
   full_name: z.string().min(1, 'Full name is required'),
   email: z.string().email('Invalid email address'),
-  password: z.string().optional(),
+  password: z
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .optional()
+    .or(z.literal('')),
   role: z.enum(['SUPER_ADMIN', 'ADMIN', 'EMPLOYEE']),
   branch_id: z.string().optional(),
   manager_id: z.string().optional().nullable(),
@@ -123,7 +127,7 @@ export function EmployeeForm({
 
         const createPayload = {
           email: data.email,
-          password: data.password,
+          password: data.password || '',
           full_name: data.full_name,
           role: data.role,
           branch_id: branchId || undefined,
@@ -136,7 +140,21 @@ export function EmployeeForm({
         const result = await createEmployee(createPayload);
 
         if (result.error) {
-          setError(result.error);
+          if (result.error === 'Invalid data' && result.details) {
+            // Map field errors back to the form
+            const fieldErrors = result.details.fieldErrors;
+            Object.keys(fieldErrors).forEach((key) => {
+              const errors = (fieldErrors as any)[key];
+              const message = errors?.[0];
+              if (message) {
+                // @ts-ignore
+                form.setError(key, { type: 'manual', message });
+              }
+            });
+            setError('Please correct the errors in the form.');
+          } else {
+            setError(result.error);
+          }
         } else {
           router.push('/dashboard/employees');
           router.refresh();

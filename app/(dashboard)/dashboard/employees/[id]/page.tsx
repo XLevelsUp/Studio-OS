@@ -1,4 +1,4 @@
-import { getBranches, getEmployee } from '@/actions/employees';
+import { getBranches, getEmployee, getAdmins } from '@/actions/employees';
 import { EmployeeForm } from '@/components/employees/employee-form';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
@@ -34,22 +34,12 @@ export default async function EmployeePage(props: EmployeePageProps) {
     redirect('/dashboard/employees');
   }
 
-  // Access Control logic
-  // Staff can only view themselves (render form read-only or just redirect if not ID match)
-  // But wait, the form allows editing.
-  // If role is STAFF and id != user.id, redirect.
-  // If role is STAFF and id == user.id, allow edit? (Depends on requirements, usually STAFF update their own profile? Prompt says "Employee: Can view their own profile")
-  // So maybe read-only?
-  // For now, if STAFF, we will render form but maybe disable fields in UI?
-  // The action `updateEmployee` prevents unauthorized updates.
-  // Let's rely on that, but maybe show strictly read-only mode if we had one.
-  // For simplicity, we just enforce the router level checks here.
-
-  if (profile?.role === 'STAFF' && profile.id !== id) {
-    redirect('/dashboard/employees'); // Or profile page
+  // EMPLOYEE role can only view/edit their own record
+  if (profile?.role === 'EMPLOYEE' && profile.id !== id) {
+    redirect('/dashboard/employees');
   }
 
-  const branches = await getBranches();
+  const [branches, admins] = await Promise.all([getBranches(), getAdmins()]);
 
   return (
     <div className='flex-1 space-y-4 p-8 pt-6'>
@@ -60,6 +50,7 @@ export default async function EmployeePage(props: EmployeePageProps) {
         <EmployeeForm
           initialData={employee}
           branches={branches || []}
+          managers={admins || []}
           isEditing={true}
         />
       </div>

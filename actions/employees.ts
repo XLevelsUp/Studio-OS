@@ -21,11 +21,6 @@ export async function getEmployees(query?: string) {
     redirect('/login');
   }
 
-  // Check permissions - only ADMIN, SUPER_ADMIN, and the user themselves (handled in UI/logic) should access.
-  // However, for the list, usually only admins see everyone.
-  // We'll enforce that STAFF can only see themselves if they call this, or return empty/restricted.
-  // Ideally, RLS protects the data, but we can also filter here.
-
   // Let's rely on RLS for data protection, but we'll add search logic.
   let dbQuery = supabase
     .from('profiles')
@@ -113,12 +108,13 @@ export async function createEmployee(data: CreateEmployeeFormData) {
     result.data;
 
   // 1. Create User in Auth (using Service Role)
+  // We pass fullName in metadata to match the updated trigger requirement
   const { data: authUser, error: authError } =
     await adminAuthClient.auth.admin.createUser({
       email,
       password,
       email_confirm: true, // Auto confirm
-      user_metadata: { full_name },
+      user_metadata: { fullName: full_name },
     });
 
   if (authError || !authUser.user) {
@@ -127,14 +123,14 @@ export async function createEmployee(data: CreateEmployeeFormData) {
   }
 
   // 2. Update Profile (Profile is auto-created by trigger, but we need to update role/branch/manager)
-  // The trigger 'handle_new_user' sets role to 'EMPLOYEE' by default (updated from STAFF).
+  // Note: fullName is already set by the (fixed) trigger if we pass it correctly in metadata.
 
   const { error: profileError } = await adminAuthClient
     .from('profiles')
     .update({
       role: role,
-      branch_id: branch_id || null,
-      managerId: manager_id || null,
+      branchId: branch_id === 'no_branch' ? null : branch_id || null,
+      managerId: manager_id === 'no_manager' ? null : manager_id || null,
     })
     .eq('id', authUser.user.id);
 
@@ -178,20 +174,16 @@ export async function updateEmployee(id: string, data: UpdateEmployeeFormData) {
 
   // Authorization Check Logic
   if (requesterProfile.role === 'EMPLOYEE') {
-    // Employee can only update themselves...
     if (id !== requester.id) return { error: 'Unauthorized' };
-    // Employee cannot change role, branch or manager
     if (role || branch_id !== undefined || manager_id !== undefined)
       return { error: 'Unauthorized to change restricted fields' };
   }
 
   if (requesterProfile.role === 'ADMIN') {
-    // Admins cannot update Super Admins.
     const target = await getEmployee(id);
     if (target?.role === 'SUPER_ADMIN') {
       return { error: 'Cannot modify Super Admin' };
     }
-    // Admins cannot promote to Super Admin
     if (role === 'SUPER_ADMIN') {
       return { error: 'Cannot promote to Super Admin' };
     }
@@ -202,10 +194,13 @@ export async function updateEmployee(id: string, data: UpdateEmployeeFormData) {
     .from('profiles')
     .update({
       fullName: full_name,
-      // Only update role/branch/manager if provided and user has permission
       ...(role ? { role } : {}),
-      ...(branch_id !== undefined ? { branch_id } : {}),
-      ...(manager_id !== undefined ? { managerId: manager_id } : {}),
+      ...(branch_id !== undefined
+        ? { branchId: branch_id === 'no_branch' ? null : branch_id }
+        : {}),
+      ...(manager_id !== undefined
+        ? { managerId: manager_id === 'no_manager' ? null : manager_id }
+        : {}),
     })
     .eq('id', id);
 
@@ -235,12 +230,10 @@ export async function deleteEmployee(id: string) {
     .eq('id', requester.id)
     .single();
 
-  // Only SUPER_ADMIN can delete
   if (!requesterProfile || requesterProfile.role !== 'SUPER_ADMIN') {
     return { error: 'Only Super Admin can delete employees' };
   }
 
-  // Use admin client to delete from Auth (cascades to public.profiles)
   const { error } = await adminAuthClient.auth.admin.deleteUser(id);
 
   if (error) {

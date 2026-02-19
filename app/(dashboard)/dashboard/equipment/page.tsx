@@ -75,21 +75,36 @@ export default async function EquipmentPage() {
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           item.status === 'AVAILABLE'
                             ? 'bg-green-100 text-green-700'
-                            : item.status === 'RENTED'
+                            : item.status === 'IN_USE'
                               ? 'bg-blue-100 text-blue-700'
                               : item.status === 'MAINTENANCE'
                                 ? 'bg-yellow-100 text-yellow-700'
-                                : 'bg-red-100 text-red-700'
+                                : 'bg-slate-100 text-slate-600' // RETIRED
                         }`}
                       >
-                        {item.status}
+                        {item.status === 'IN_USE'
+                          ? 'In Use'
+                          : item.status === 'AVAILABLE'
+                            ? 'Available'
+                            : item.status === 'MAINTENANCE'
+                              ? 'Maintenance'
+                              : 'Retired'}
                       </span>
                     </TableCell>
                     <TableCell>${item.rentalPrice}</TableCell>
-                    <TableCell>
+                    <TableCell className='space-x-2'>
                       <Link href={`/dashboard/equipment/${item.id}`}>
                         <Button variant='outline' size='sm'>
                           View
+                        </Button>
+                      </Link>
+                      <Link href={`/dashboard/equipment/${item.id}/history`}>
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          className='text-slate-500'
+                        >
+                          History
                         </Button>
                       </Link>
                     </TableCell>

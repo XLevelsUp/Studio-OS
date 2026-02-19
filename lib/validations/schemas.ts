@@ -7,6 +7,7 @@ export const equipmentSchema = z.object({
   categoryId: z.string().uuid('Invalid category'),
   branchId: z.string().uuid('Invalid branch'),
   rentalPrice: z.number().positive('Price must be positive'),
+  description: z.string().optional().nullable(),
 });
 
 export type EquipmentFormData = z.infer<typeof equipmentSchema>;

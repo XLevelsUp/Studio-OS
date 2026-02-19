@@ -34,9 +34,10 @@ import {
 const formSchema = z.object({
   full_name: z.string().min(1, 'Full name is required'),
   email: z.string().email('Invalid email address'),
-  password: z.string().optional(), // Allow empty string to be handled in refine or check
-  role: z.enum(['SUPER_ADMIN', 'ADMIN', 'STAFF']),
-  branch_id: z.string().optional(), // Removed uuid() to allow "no_branch" or empty
+  password: z.string().optional(),
+  role: z.enum(['SUPER_ADMIN', 'ADMIN', 'EMPLOYEE']),
+  branch_id: z.string().optional(),
+  manager_id: z.string().optional().nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -46,15 +47,22 @@ interface Branch {
   name: string;
 }
 
+interface Manager {
+  id: string;
+  fullName: string | null;
+}
+
 interface EmployeeFormProps {
-  initialData?: any; // Using any for simplicity as it matches database shape
+  initialData?: any;
   branches: Branch[];
+  managers: Manager[];
   isEditing?: boolean;
 }
 
 export function EmployeeForm({
   initialData,
   branches,
+  managers,
   isEditing = false,
 }: EmployeeFormProps) {
   const router = useRouter();
@@ -64,13 +72,16 @@ export function EmployeeForm({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: initialData?.full_name || '',
+      full_name: initialData?.fullName || initialData?.full_name || '',
       email: initialData?.email || '',
-      role: initialData?.role || 'STAFF',
+      role: initialData?.role || 'EMPLOYEE',
       branch_id: initialData?.branch_id || 'no_branch',
+      manager_id: initialData?.managerId || 'no_manager',
       password: '',
     },
   });
+
+  const selectedRole = form.watch('role');
 
   async function onSubmit(data: FormValues) {
     setIsLoading(true);
@@ -88,6 +99,10 @@ export function EmployeeForm({
           full_name: data.full_name,
           role: data.role,
           branch_id: branchId,
+          manager_id:
+            data.manager_id === 'no_manager' || !data.manager_id
+              ? null
+              : data.manager_id,
         };
 
         const result = await updateEmployee(initialData.id, updatePayload);
@@ -111,7 +126,11 @@ export function EmployeeForm({
           password: data.password,
           full_name: data.full_name,
           role: data.role,
-          branch_id: branchId || undefined, // undefined allows optional to pass Zod if schema expects optional
+          branch_id: branchId || undefined,
+          manager_id:
+            data.manager_id === 'no_manager' || !data.manager_id
+              ? null
+              : data.manager_id,
         };
 
         const result = await createEmployee(createPayload);
@@ -206,10 +225,8 @@ export function EmployeeForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value='STAFF'>Staff (Employee)</SelectItem>
-                    <SelectItem value='ADMIN'>
-                      Admin (Studio Manager)
-                    </SelectItem>
+                    <SelectItem value='EMPLOYEE'>Employee (Staff)</SelectItem>
+                    <SelectItem value='ADMIN'>Admin (Manager)</SelectItem>
                     <SelectItem value='SUPER_ADMIN'>Super Admin</SelectItem>
                   </SelectContent>
                 </Select>
@@ -220,6 +237,38 @@ export function EmployeeForm({
               </FormItem>
             )}
           />
+
+          {selectedRole === 'EMPLOYEE' && (
+            <FormField
+              control={form.control}
+              name='manager_id'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Manager</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value || 'no_manager'}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Assign a manager' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value='no_manager'>No Manager</SelectItem>
+                      {managers.map((manager) => (
+                        <SelectItem key={manager.id} value={manager.id}>
+                          {manager.fullName || 'Unnamed Admin'}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Assign a supervisor.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}

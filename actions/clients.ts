@@ -11,7 +11,7 @@ export async function getClients() {
   const { data, error } = await supabase
     .from('clients')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('createdAt', { ascending: false });
 
   if (error) {
     throw new Error(`Failed to fetch clients: ${error.message}`);
@@ -29,7 +29,7 @@ export async function createNewClient(formData: FormData) {
     email: formData.get('email') as string,
     phone: (formData.get('phone') as string) || undefined,
     address: (formData.get('address') as string) || undefined,
-    govt_id: (formData.get('govt_id') as string) || undefined,
+    govtId: (formData.get('govt_id') as string) || undefined,
   };
 
   // Validate
@@ -58,7 +58,7 @@ export async function updateClient(id: string, formData: FormData) {
     email: formData.get('email') as string,
     phone: (formData.get('phone') as string) || undefined,
     address: (formData.get('address') as string) || undefined,
-    govt_id: (formData.get('govt_id') as string) || undefined,
+    govtId: (formData.get('govt_id') as string) || undefined,
   };
 
   // Validate

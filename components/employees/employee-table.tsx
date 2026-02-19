@@ -24,16 +24,16 @@ import { useState } from 'react';
 
 interface Employee {
   id: string;
-  full_name: string | null;
+  fullName: string | null;
   email: string;
-  role: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF';
-  branch_id: string | null;
+  role: 'SUPER_ADMIN' | 'ADMIN' | 'EMPLOYEE';
+  branchId: string | null;
   branches: { name: string } | null;
 }
 
 interface EmployeeTableProps {
   employees: Employee[];
-  currentUserRole: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF';
+  currentUserRole: 'SUPER_ADMIN' | 'ADMIN' | 'EMPLOYEE';
 }
 
 export function EmployeeTable({
@@ -86,7 +86,7 @@ export function EmployeeTable({
             employees.map((employee) => (
               <TableRow key={employee.id}>
                 <TableCell className='font-medium'>
-                  {employee.full_name || 'N/A'}
+                  {employee.fullName || 'N/A'}
                 </TableCell>
                 <TableCell>{employee.email}</TableCell>
                 <TableCell>

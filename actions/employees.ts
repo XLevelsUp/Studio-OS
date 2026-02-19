@@ -29,11 +29,11 @@ export async function getEmployees(query?: string) {
   // Let's rely on RLS for data protection, but we'll add search logic.
   let dbQuery = supabase
     .from('profiles')
-    .select('*, branches(name)')
-    .order('created_at', { ascending: false });
+    .select('*, branches(name), manager:managerId(fullName)')
+    .order('createdAt', { ascending: false });
 
   if (query) {
-    dbQuery = dbQuery.ilike('full_name', `%${query}%`);
+    dbQuery = dbQuery.ilike('fullName', `%${query}%`);
   }
 
   const { data, error } = await dbQuery;
@@ -66,7 +66,7 @@ export async function getEmployee(id: string) {
 
   const { data, error } = await supabase
     .from('profiles')
-    .select('*, branches(name)')
+    .select('*, branches(name), manager:managerId(fullName)')
     .eq('id', id)
     .single();
 
@@ -109,7 +109,8 @@ export async function createEmployee(data: CreateEmployeeFormData) {
     return { error: 'Invalid data', details: result.error.flatten() };
   }
 
-  const { email, password, full_name, role, branch_id } = result.data;
+  const { email, password, full_name, role, branch_id, manager_id } =
+    result.data;
 
   // 1. Create User in Auth (using Service Role)
   const { data: authUser, error: authError } =
@@ -125,28 +126,20 @@ export async function createEmployee(data: CreateEmployeeFormData) {
     return { error: authError?.message || 'Failed to create user' };
   }
 
-  // 2. Update Profile (Profile is auto-created by trigger, but we need to update role/branch)
-  // The trigger 'handle_new_user' sets role to 'STAFF' by default.
-  // We need to update it to the selected role and set branch.
-
-  // Wait a moment for trigger... or just update upsert style.
-  // Since we have the ID, we can update directly using the admin client to bypass RLS if needed,
-  // OR use the regular client if RLS allows ADMINs to update profiles (which it does based on our policies).
-
-  // Using admin user to update profile to ensure it succeeds regardless of specific RLS lag or restrictions on 'insert'.
+  // 2. Update Profile (Profile is auto-created by trigger, but we need to update role/branch/manager)
+  // The trigger 'handle_new_user' sets role to 'EMPLOYEE' by default (updated from STAFF).
 
   const { error: profileError } = await adminAuthClient
     .from('profiles')
     .update({
       role: role,
       branch_id: branch_id || null,
+      managerId: manager_id || null,
     })
     .eq('id', authUser.user.id);
 
   if (profileError) {
     console.error('Error updating profile:', profileError);
-    // Cleanup auth user if profile update fails?
-    // Ideally yes, but for now we'll return error.
     return { error: 'User created but failed to update profile details.' };
   }
 
@@ -181,16 +174,15 @@ export async function updateEmployee(id: string, data: UpdateEmployeeFormData) {
     return { error: 'Invalid data', details: result.error.flatten() };
   }
 
-  const { full_name, role, branch_id } = result.data;
+  const { full_name, role, branch_id, manager_id } = result.data;
 
   // Authorization Check Logic
-  if (requesterProfile.role === 'STAFF') {
-    // Staff can only update themselves... but this action is typically for admin updates.
-    // If we want to allow staff to update their own name, we'd check id === requester.id
+  if (requesterProfile.role === 'EMPLOYEE') {
+    // Employee can only update themselves...
     if (id !== requester.id) return { error: 'Unauthorized' };
-    // Staff cannot change role or branch
-    if (role || branch_id !== undefined)
-      return { error: 'Unauthorized to change role/branch' };
+    // Employee cannot change role, branch or manager
+    if (role || branch_id !== undefined || manager_id !== undefined)
+      return { error: 'Unauthorized to change restricted fields' };
   }
 
   if (requesterProfile.role === 'ADMIN') {
@@ -209,10 +201,11 @@ export async function updateEmployee(id: string, data: UpdateEmployeeFormData) {
   const { error } = await supabase
     .from('profiles')
     .update({
-      full_name,
-      // Only update role/branch if provided and user has permission
+      fullName: full_name,
+      // Only update role/branch/manager if provided and user has permission
       ...(role ? { role } : {}),
       ...(branch_id !== undefined ? { branch_id } : {}),
+      ...(manager_id !== undefined ? { managerId: manager_id } : {}),
     })
     .eq('id', id);
 
@@ -257,4 +250,20 @@ export async function deleteEmployee(id: string) {
 
   revalidatePath('/dashboard/employees');
   return { success: true };
+}
+
+export async function getAdmins() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, fullName')
+    .in('role', ['ADMIN', 'SUPER_ADMIN'])
+    .order('fullName');
+
+  if (error) {
+    console.error('Error fetching admins:', error);
+    return [];
+  }
+
+  return data;
 }

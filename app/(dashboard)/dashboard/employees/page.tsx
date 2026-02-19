@@ -21,9 +21,15 @@ export default async function EmployeesPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('role, email')
     .eq('id', user.id)
     .single();
+
+  console.log('--- Auth Debug ---');
+  console.log('User ID:', user.id);
+  console.log('Email:', profile?.email);
+  console.log('Current Role:', profile?.role);
+  console.log('------------------');
 
   const employees = await getEmployees();
 
@@ -48,7 +54,7 @@ export default async function EmployeesPage() {
         <Suspense fallback={<div>Loading employees...</div>}>
           <EmployeeTable
             employees={employees || []}
-            currentUserRole={profile?.role || 'STAFF'}
+            currentUserRole={profile?.role || 'EMPLOYEE'}
           />
         </Suspense>
       </div>

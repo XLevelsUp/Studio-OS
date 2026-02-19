@@ -68,7 +68,7 @@ export default async function EquipmentPage() {
                 equipment.map((item: any) => (
                   <TableRow key={item.id}>
                     <TableCell className='font-medium'>{item.name}</TableCell>
-                    <TableCell>{item.serial_number}</TableCell>
+                    <TableCell>{item.serialNumber}</TableCell>
                     <TableCell>{item.categories?.name || 'N/A'}</TableCell>
                     <TableCell>
                       <span
@@ -85,7 +85,7 @@ export default async function EquipmentPage() {
                         {item.status}
                       </span>
                     </TableCell>
-                    <TableCell>${item.rental_price}</TableCell>
+                    <TableCell>${item.rentalPrice}</TableCell>
                     <TableCell>
                       <Link href={`/dashboard/equipment/${item.id}`}>
                         <Button variant='outline' size='sm'>

@@ -16,7 +16,7 @@ export async function getEquipment() {
   const { data, error } = await supabase
     .from('equipment')
     .select('*, categories(name), branches(name)')
-    .order('created_at', { ascending: false });
+    .order('createdAt', { ascending: false });
 
   if (error) {
     throw new Error(`Failed to fetch equipment: ${error.message}`);
@@ -48,10 +48,10 @@ export async function createEquipment(formData: FormData) {
 
   const rawData = {
     name: formData.get('name') as string,
-    serial_number: formData.get('serial_number') as string,
-    category_id: formData.get('category_id') as string,
-    branch_id: formData.get('branch_id') as string,
-    rental_price: parseFloat(formData.get('rental_price') as string),
+    serialNumber: formData.get('serial_number') as string,
+    categoryId: formData.get('category_id') as string,
+    branchId: formData.get('branch_id') as string,
+    rentalPrice: parseFloat(formData.get('rental_price') as string),
     description: (formData.get('description') as string) || null,
   };
 
@@ -81,10 +81,10 @@ export async function updateEquipment(id: string, formData: FormData) {
 
   const rawData = {
     name: formData.get('name') as string,
-    serial_number: formData.get('serial_number') as string,
-    category_id: formData.get('category_id') as string,
-    branch_id: formData.get('branch_id') as string,
-    rental_price: parseFloat(formData.get('rental_price') as string),
+    serialNumber: formData.get('serial_number') as string,
+    categoryId: formData.get('category_id') as string,
+    branchId: formData.get('branch_id') as string,
+    rentalPrice: parseFloat(formData.get('rental_price') as string),
     description: (formData.get('description') as string) || null,
   };
 

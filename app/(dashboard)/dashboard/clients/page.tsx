@@ -64,7 +64,7 @@ export default async function ClientsPage() {
                     <TableCell className='font-medium'>{client.name}</TableCell>
                     <TableCell>{client.email}</TableCell>
                     <TableCell>{client.phone || '-'}</TableCell>
-                    <TableCell>{client.govt_id || '-'}</TableCell>
+                    <TableCell>{client.govtId || '-'}</TableCell>
                     <TableCell>
                       <Link href={`/dashboard/clients/${client.id}`}>
                         <Button variant='outline' size='sm'>

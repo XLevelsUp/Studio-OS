@@ -3,10 +3,10 @@ import { z } from 'zod';
 // Equipment Validation
 export const equipmentSchema = z.object({
   name: z.string().min(1, 'Equipment name is required'),
-  serial_number: z.string().min(1, 'Serial number is required'),
-  category_id: z.string().uuid('Invalid category'),
-  branch_id: z.string().uuid('Invalid branch'),
-  rental_price: z.number().positive('Price must be positive'),
+  serialNumber: z.string().min(1, 'Serial number is required'),
+  categoryId: z.string().uuid('Invalid category'),
+  branchId: z.string().uuid('Invalid branch'),
+  rentalPrice: z.number().positive('Price must be positive'),
 });
 
 export type EquipmentFormData = z.infer<typeof equipmentSchema>;
@@ -17,7 +17,7 @@ export const clientSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().optional(),
   address: z.string().optional(),
-  govt_id: z.string().optional(),
+  govtId: z.string().optional(),
 });
 
 export type ClientFormData = z.infer<typeof clientSchema>;

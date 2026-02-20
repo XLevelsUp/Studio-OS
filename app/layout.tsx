@@ -157,10 +157,8 @@ export default function RootLayout({
   };
 
   return (
-    <html lang='en'>
-      <body
-        className={`${inter.variable} font-sans antialiased bg-zinc-950 text-white`}
-      >
+    <html lang='en' className='dark'>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <script
           type='application/ld+json'
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

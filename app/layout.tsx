@@ -157,7 +157,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang='en'>
+    <html lang='en' className='dark'>
       <body className={`${inter.variable} font-sans antialiased`}>
         <script
           type='application/ld+json'

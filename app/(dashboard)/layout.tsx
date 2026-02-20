@@ -31,40 +31,42 @@ export default async function DashboardLayout({
     .single();
 
   return (
-    <div className='min-h-screen bg-slate-50 pt-20'>
+    <div className='min-h-screen bg-[#0A0A0B] pt-20'>
       <div className='flex'>
         {/* Sidebar */}
-        <aside className='w-64 bg-slate-900 text-white fixed left-0 top-20 bottom-0 overflow-y-auto'>
+        <aside className='w-64 bg-[rgba(17,17,22,0.98)] border-r border-[rgba(194,178,128,0.12)] text-white fixed left-0 top-20 bottom-0 overflow-y-auto backdrop-blur-xl'>
           <div className='p-6'>
-            <h1 className='text-2xl font-bold mb-8'>Rental System</h1>
-            <nav className='space-y-2'>
+            <h1 className='text-xl font-bold mb-8 text-gradient-gold'>
+              Rental System
+            </h1>
+            <nav className='space-y-1'>
               <a
                 href='/dashboard'
-                className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
               >
                 Dashboard
               </a>
               <a
                 href='/dashboard/equipment'
-                className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
               >
                 Equipment
               </a>
               <a
                 href='/dashboard/clients'
-                className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
               >
                 Clients
               </a>
               <a
                 href='/dashboard/rentals'
-                className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
               >
                 Rentals
               </a>
               <a
                 href='/dashboard/employees'
-                className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
               >
                 Employees
               </a>
@@ -73,13 +75,13 @@ export default async function DashboardLayout({
                 <>
                   <a
                     href='/dashboard/categories'
-                    className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                    className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
                   >
                     Categories
                   </a>
                   <a
                     href='/dashboard/branches'
-                    className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                    className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
                   >
                     Branches
                   </a>
@@ -88,29 +90,29 @@ export default async function DashboardLayout({
               {profile?.role === 'SUPER_ADMIN' && (
                 <a
                   href='/dashboard/audit-logs'
-                  className='block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors'
+                  className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
                 >
                   Audit Logs
                 </a>
               )}
             </nav>
           </div>
-          <div className='absolute bottom-0 left-0 right-0 p-6 border-t border-slate-800 bg-slate-900'>
+          <div className='absolute bottom-0 left-0 right-0 p-6 border-t border-[rgba(194,178,128,0.12)] bg-[rgba(17,17,22,0.98)]'>
             <div className='flex items-center justify-between'>
-              <div className='text-sm text-slate-400'>
+              <div className='text-sm text-[rgba(229,221,200,0.50)]'>
                 <Link
                   href={`/dashboard/employees/${user.id}`}
-                  className='font-medium text-white hover:underline truncate block'
+                  className='font-medium text-white hover:text-[#C2B280] truncate block transition-colors duration-150'
                 >
                   {profile?.full_name || user.email}
                 </Link>
-                <p className='text-xs mt-1 capitalize'>
+                <p className='text-xs mt-1 capitalize text-[rgba(194,178,128,0.55)]'>
                   {profile?.role.replace('_', ' ').toLowerCase()}
                 </p>
               </div>
               <form action='/auth/signout' method='post'>
                 <button
-                  className='text-slate-400 hover:text-white transition-colors'
+                  className='text-[rgba(194,178,128,0.50)] hover:text-[#C2B280] transition-colors'
                   title='Sign Out'
                 >
                   <svg
@@ -136,7 +138,9 @@ export default async function DashboardLayout({
         </aside>
 
         {/* Main content */}
-        <main className='ml-64 flex-1 p-8'>{children}</main>
+        <main className='ml-64 flex-1 p-8 min-h-screen bg-[#0A0A0B]'>
+          {children}
+        </main>
       </div>
     </div>
   );

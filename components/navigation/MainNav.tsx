@@ -17,7 +17,7 @@ export function MainNav() {
     <nav
       className='
       fixed top-0 z-40 w-full
-      border-b border-[rgba(194,178,128,0.12)]
+      border-b border-primary/12
       bg-[rgba(10,10,11,0.85)] backdrop-blur-xl
     '
     >
@@ -42,9 +42,9 @@ export function MainNav() {
                 href={item.href}
                 className='
                   flex items-center gap-2
-                  text-sm text-[rgba(229,221,200,0.55)]
+                  text-sm text-foreground/55
                   transition-colors duration-200
-                  hover:text-[#C2B280]
+                  hover:text-primary
                 '
               >
                 <item.icon className='h-3.5 w-3.5' />
@@ -61,12 +61,12 @@ export function MainNav() {
           rel='noopener noreferrer'
           className='
             flex items-center gap-2 rounded-full
-            border border-[rgba(194,178,128,0.35)]
-            bg-[rgba(194,178,128,0.08)]
-            px-5 py-2.5 text-sm font-semibold text-[#C2B280]
+            border border-primary/35
+            bg-primary/8
+            px-5 py-2.5 text-sm font-semibold text-primary
             transition-all duration-200
-            hover:bg-[rgba(194,178,128,0.18)] hover:border-[rgba(194,178,128,0.60)]
-            hover:text-white hover:shadow-[0_0_20px_rgba(194,178,128,0.20)]
+            hover:bg-primary/18 hover:border-primary/60
+            hover:text-white hover:shadow-[0_0_20px_hsl(var(--primary)/0.20)]
           '
         >
           <MessageCircle className='h-4 w-4' />

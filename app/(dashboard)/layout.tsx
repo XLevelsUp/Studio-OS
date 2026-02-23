@@ -34,54 +34,39 @@ export default async function DashboardLayout({
     <div className='min-h-screen bg-[#0A0A0B] pt-20'>
       <div className='flex'>
         {/* Sidebar */}
-        <aside className='w-64 bg-[rgba(17,17,22,0.98)] border-r border-[rgba(194,178,128,0.12)] text-white fixed left-0 top-20 bottom-0 overflow-y-auto backdrop-blur-xl'>
+        <aside className='w-64 bg-[rgba(17,17,22,0.98)] border-r border-primary/12 text-white fixed left-0 top-20 bottom-0 overflow-y-auto backdrop-blur-xl'>
           <div className='p-6'>
             <h1 className='text-xl font-bold mb-8 text-gradient-gold'>
               Rental System
             </h1>
             <nav className='space-y-1'>
-              <a
-                href='/dashboard'
-                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
-              >
-                Dashboard
-              </a>
-              <a
-                href='/dashboard/equipment'
-                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
-              >
-                Equipment
-              </a>
-              <a
-                href='/dashboard/clients'
-                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
-              >
-                Clients
-              </a>
-              <a
-                href='/dashboard/rentals'
-                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
-              >
-                Rentals
-              </a>
-              <a
-                href='/dashboard/employees'
-                className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
-              >
-                Employees
-              </a>
+              {[
+                { href: '/dashboard', label: 'Dashboard' },
+                { href: '/dashboard/equipment', label: 'Equipment' },
+                { href: '/dashboard/clients', label: 'Clients' },
+                { href: '/dashboard/rentals', label: 'Rentals' },
+                { href: '/dashboard/employees', label: 'Employees' },
+              ].map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className='block px-4 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-primary hover:bg-primary/8 transition-all duration-150'
+                >
+                  {item.label}
+                </a>
+              ))}
               {(profile?.role === 'ADMIN' ||
                 profile?.role === 'SUPER_ADMIN') && (
                 <>
                   <a
                     href='/dashboard/categories'
-                    className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
+                    className='block px-4 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-primary hover:bg-primary/8 transition-all duration-150'
                   >
                     Categories
                   </a>
                   <a
                     href='/dashboard/branches'
-                    className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
+                    className='block px-4 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-primary hover:bg-primary/8 transition-all duration-150'
                   >
                     Branches
                   </a>
@@ -90,29 +75,29 @@ export default async function DashboardLayout({
               {profile?.role === 'SUPER_ADMIN' && (
                 <a
                   href='/dashboard/audit-logs'
-                  className='block px-4 py-2.5 rounded-xl text-sm text-[rgba(229,221,200,0.60)] hover:text-[#C2B280] hover:bg-[rgba(194,178,128,0.08)] transition-all duration-150'
+                  className='block px-4 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-primary hover:bg-primary/8 transition-all duration-150'
                 >
                   Audit Logs
                 </a>
               )}
             </nav>
           </div>
-          <div className='absolute bottom-0 left-0 right-0 p-6 border-t border-[rgba(194,178,128,0.12)] bg-[rgba(17,17,22,0.98)]'>
+          <div className='absolute bottom-0 left-0 right-0 p-6 border-t border-primary/12 bg-[rgba(17,17,22,0.98)]'>
             <div className='flex items-center justify-between'>
-              <div className='text-sm text-[rgba(229,221,200,0.50)]'>
+              <div className='text-sm text-foreground/50'>
                 <Link
                   href={`/dashboard/employees/${user.id}`}
-                  className='font-medium text-white hover:text-[#C2B280] truncate block transition-colors duration-150'
+                  className='font-medium text-white hover:text-primary truncate block transition-colors duration-150'
                 >
                   {profile?.full_name || user.email}
                 </Link>
-                <p className='text-xs mt-1 capitalize text-[rgba(194,178,128,0.55)]'>
+                <p className='text-xs mt-1 capitalize text-primary/55'>
                   {profile?.role.replace('_', ' ').toLowerCase()}
                 </p>
               </div>
               <form action='/auth/signout' method='post'>
                 <button
-                  className='text-[rgba(194,178,128,0.50)] hover:text-[#C2B280] transition-colors'
+                  className='text-primary/50 hover:text-primary transition-colors'
                   title='Sign Out'
                 >
                   <svg

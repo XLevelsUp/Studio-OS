@@ -49,17 +49,17 @@ export function EquipmentCard({
         ref={cardRef}
         className='
           relative h-full overflow-hidden rounded-2xl
-          border border-[rgba(194,178,128,0.15)]
+          border border-primary/15
           bg-[rgba(17,17,22,0.80)] backdrop-blur-md
           transition-all duration-300
-          group-hover:border-[rgba(194,178,128,0.40)]
-          group-hover:shadow-[0_20px_60px_rgba(194,178,128,0.20)]
+          group-hover:border-primary/40
+          group-hover:shadow-[0_20px_60px_hsl(var(--primary)/0.20)]
         '
       >
         {/* Image / placeholder */}
         <div className='relative aspect-square overflow-hidden bg-[rgba(26,29,46,0.80)]'>
           <div className='flex h-full items-center justify-center'>
-            <Camera className='h-16 w-16 text-[rgba(194,178,128,0.25)] transition-all duration-300 group-hover:text-[rgba(194,178,128,0.50)]' />
+            <Camera className='h-16 w-16 text-primary/25 transition-all duration-300 group-hover:text-primary/50' />
           </div>
 
           {/* Availability badge */}
@@ -77,8 +77,8 @@ export function EquipmentCard({
             <span
               className='
               absolute right-3 top-3 rounded-full
-              border border-[rgba(194,178,128,0.20)] bg-[rgba(194,178,128,0.08)]
-              px-3 py-1 text-xs font-semibold text-[rgba(194,178,128,0.60)]
+              border border-primary/20 bg-primary/8
+              px-3 py-1 text-xs font-semibold text-primary/60
             '
             >
               Rented
@@ -98,9 +98,9 @@ export function EquipmentCard({
             {specs.slice(0, 3).map((spec, i) => (
               <li
                 key={i}
-                className='flex items-center gap-2 text-xs text-[rgba(229,221,200,0.55)]'
+                className='flex items-center gap-2 text-xs text-foreground/55'
               >
-                <span className='h-1 w-1 flex-shrink-0 rounded-full bg-[#C2B280] opacity-60' />
+                <span className='h-1 w-1 flex-shrink-0 rounded-full bg-primary opacity-60' />
                 {spec}
               </li>
             ))}
@@ -109,14 +109,14 @@ export function EquipmentCard({
           {/* Pricing */}
           <div className='mb-5 flex items-end gap-4'>
             <div>
-              <p className='text-2xl font-bold text-[#C2B280]'>₹{dailyRate}</p>
-              <p className='text-xs text-[rgba(229,221,200,0.45)]'>/day</p>
+              <p className='text-2xl font-bold text-primary'>₹{dailyRate}</p>
+              <p className='text-xs text-foreground/45'>/day</p>
             </div>
             <div>
-              <p className='text-base font-semibold text-[rgba(229,221,200,0.70)]'>
+              <p className='text-base font-semibold text-foreground/70'>
                 ₹{weeklyRate}
               </p>
-              <p className='text-xs text-[rgba(229,221,200,0.45)]'>/week</p>
+              <p className='text-xs text-foreground/45'>/week</p>
             </div>
           </div>
 
@@ -130,10 +130,10 @@ export function EquipmentCard({
             rel='noopener noreferrer'
             className='
               block w-full rounded-xl py-3 text-center
-              bg-gradient-to-r from-[#C2B280] to-[#D9CAA0]
-              text-sm font-semibold text-[#0A0A0B]
+              bg-primary text-primary-foreground
+              text-sm font-semibold
               transition-all duration-200
-              hover:shadow-[0_8px_28px_rgba(194,178,128,0.35)]
+              hover:opacity-90 hover:shadow-[0_8px_28px_hsl(var(--primary)/0.35)]
               hover:scale-[1.02] active:scale-[0.98]
             '
           >

@@ -20,31 +20,31 @@
   --popover: 240 8% 7%;
   --popover-foreground: 0 0% 98%;
 
-  --primary: 42 35% 63%;
-  --primary-foreground: 240 6% 4%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
 
   --secondary: 240 8% 10%;
   --secondary-foreground: 0 0% 98%;
 
   --muted: 240 8% 10%;
-  --muted-foreground: 35 35% 73%;
+  --muted-foreground: 215 20% 65%;
 
   --accent: 240 8% 10%;
-  --accent-foreground: 42 35% 63%;
+  --accent-foreground: 217 91% 60%;
 
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
 
   --border: 240 8% 14%;
   --input: 240 8% 14%;
-  --ring: 42 35% 63%;
+  --ring: 217 91% 60%;
 
   /* Chart tokens */
-  --chart-1: 42 35% 63%;
+  --chart-1: 217 91% 60%;
   --chart-2: 230 25% 41%;
-  --chart-3: 35 46% 82%;
+  --chart-3: 210 40% 70%;
   --chart-4: 230 25% 55%;
-  --chart-5: 42 45% 70%;
+  --chart-5: 217 91% 70%;
 
   /* Extended brand tokens */
   --color-neutral: 240 6% 15%;

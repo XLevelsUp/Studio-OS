@@ -39,15 +39,15 @@ export function BookingFlyout({ service }: BookingFlyoutProps = {}) {
                 transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 className='
                   w-72 overflow-hidden rounded-2xl
-                  border border-[rgba(194,178,128,0.22)]
+                  border border-primary/22
                   bg-[rgba(14,15,22,0.96)] backdrop-blur-2xl
-                  shadow-[0_24px_80px_rgba(0,0,0,0.50),0_0_0_1px_rgba(194,178,128,0.08)]
+                  shadow-[0_24px_80px_rgba(0,0,0,0.50),0_0_0_1px_hsl(var(--primary)/0.08)]
                 '
               >
                 {/* Header */}
-                <div className='flex items-start justify-between border-b border-[rgba(194,178,128,0.12)] p-4'>
+                <div className='flex items-start justify-between border-b border-primary/12 p-4'>
                   <div>
-                    <p className='text-[10px] font-semibold uppercase tracking-[0.18em] text-[#C2B280] opacity-80'>
+                    <p className='text-[10px] font-semibold uppercase tracking-[0.18em] text-primary opacity-80'>
                       Quick Inquiry
                     </p>
                     <p className='mt-0.5 text-sm font-semibold text-white'>
@@ -58,9 +58,9 @@ export function BookingFlyout({ service }: BookingFlyoutProps = {}) {
                     onClick={() => setExpanded(false)}
                     className='
                       flex h-7 w-7 items-center justify-center rounded-lg
-                      border border-[rgba(194,178,128,0.15)] text-[#C2B280]
+                      border border-primary/15 text-primary
                       transition-all duration-200
-                      hover:border-[rgba(194,178,128,0.40)] hover:bg-[rgba(194,178,128,0.12)]
+                      hover:border-primary/40 hover:bg-primary/12
                     '
                   >
                     <X className='h-3.5 w-3.5' />
@@ -69,7 +69,7 @@ export function BookingFlyout({ service }: BookingFlyoutProps = {}) {
 
                 {/* Body */}
                 <div className='p-4'>
-                  <p className='mb-4 text-xs text-[rgba(229,221,200,0.55)] leading-relaxed'>
+                  <p className='mb-4 text-xs text-foreground/55 leading-relaxed'>
                     Tap below to open WhatsApp with your enquiry pre-filled. We
                     typically respond within 30 minutes.
                   </p>
@@ -79,10 +79,10 @@ export function BookingFlyout({ service }: BookingFlyoutProps = {}) {
                     rel='noopener noreferrer'
                     className='
                       flex w-full items-center justify-center gap-2 rounded-xl py-3
-                      bg-gradient-to-r from-[#C2B280] to-[#D9CAA0]
-                      text-sm font-semibold text-[#0A0A0B]
+                      bg-primary text-primary-foreground
+                      text-sm font-semibold
                       transition-all duration-200
-                      hover:shadow-[0_8px_28px_rgba(194,178,128,0.40)]
+                      hover:opacity-90 hover:shadow-[0_8px_28px_hsl(var(--primary)/0.40)]
                       hover:scale-[1.02] active:scale-[0.98]
                     '
                   >
@@ -103,15 +103,15 @@ export function BookingFlyout({ service }: BookingFlyoutProps = {}) {
                 aria-label='Open quick inquiry'
                 className='
                   flex items-center gap-3 rounded-full
-                  border border-[rgba(194,178,128,0.35)]
+                  border border-primary/35
                   bg-[rgba(14,15,22,0.90)] backdrop-blur-xl
-                  px-5 py-3.5 text-sm font-semibold text-[#C2B280]
-                  shadow-[0_8px_32px_rgba(0,0,0,0.40),0_0_0_1px_rgba(194,178,128,0.08)]
+                  px-5 py-3.5 text-sm font-semibold text-primary
+                  shadow-[0_8px_32px_rgba(0,0,0,0.40),0_0_0_1px_hsl(var(--primary)/0.08)]
                   transition-all duration-200
-                  hover:border-[rgba(194,178,128,0.60)]
-                  hover:bg-[rgba(194,178,128,0.12)]
+                  hover:border-primary/60
+                  hover:bg-primary/12
                   hover:text-white
-                  hover:shadow-[0_8px_32px_rgba(194,178,128,0.25)]
+                  hover:shadow-[0_8px_32px_hsl(var(--primary)/0.25)]
                   animate-pulse-gold
                 '
               >

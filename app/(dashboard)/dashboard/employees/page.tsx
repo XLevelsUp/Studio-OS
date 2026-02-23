@@ -40,7 +40,7 @@ export default async function EmployeesPage() {
     <div className='flex-1 space-y-6 p-8 pt-6'>
       <div className='flex items-center justify-between'>
         <div>
-          <p className='text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C2B280] opacity-75 mb-1'>
+          <p className='text-[10px] font-semibold uppercase tracking-[0.22em] text-primary opacity-75 mb-1'>
             Team Management
           </p>
           <h2 className='text-3xl font-bold tracking-tight text-white'>
@@ -53,12 +53,12 @@ export default async function EmployeesPage() {
               <button
                 className='
                 flex items-center gap-2 rounded-xl
-                border border-[rgba(194,178,128,0.35)]
-                bg-[rgba(194,178,128,0.08)]
-                px-5 py-2.5 text-sm font-semibold text-[#C2B280]
+                border border-primary/35
+                bg-primary/8
+                px-5 py-2.5 text-sm font-semibold text-primary
                 transition-all duration-200
-                hover:bg-[rgba(194,178,128,0.18)] hover:border-[rgba(194,178,128,0.60)]
-                hover:text-white hover:shadow-[0_0_16px_rgba(194,178,128,0.20)]
+                hover:bg-primary/18 hover:border-primary/60
+                hover:text-white hover:shadow-[0_0_16px_hsl(var(--primary)/0.20)]
               '
               >
                 <Plus className='h-4 w-4' /> Add Employee
@@ -70,7 +70,7 @@ export default async function EmployeesPage() {
       <div className='h-full flex-1 flex-col space-y-8 flex'>
         <Suspense
           fallback={
-            <div className='text-[#E5DDC8] opacity-50 py-8 text-center'>
+            <div className='text-foreground/50 py-8 text-center'>
               Loading employees…
             </div>
           }

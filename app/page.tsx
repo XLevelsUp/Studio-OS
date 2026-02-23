@@ -73,10 +73,10 @@ export default function HomePage() {
         <div className='absolute inset-0 bg-gradient-to-b from-[rgba(46,49,69,0.30)] via-transparent to-[rgba(10,10,11,0.85)]' />
         <div className='absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_40%,rgba(46,49,69,0.40),transparent)]' />
 
-        {/* Decorative gold ring */}
+        {/* Decorative ring — uses primary brand color */}
         <div className='pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-          <div className='h-[520px] w-[520px] rounded-full border border-[rgba(194,178,128,0.07)]' />
-          <div className='absolute inset-8 rounded-full border border-[rgba(194,178,128,0.05)]' />
+          <div className='h-[520px] w-[520px] rounded-full border border-primary/10' />
+          <div className='absolute inset-8 rounded-full border border-primary/7' />
         </div>
 
         <div className='relative z-10 text-center'>
@@ -84,7 +84,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className='mb-4 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#C2B280] opacity-80'
+            className='mb-4 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary opacity-80'
           >
             Creative Infrastructure
           </motion.p>
@@ -103,7 +103,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className='mx-auto mb-8 max-w-2xl text-lg text-[#E5DDC8] opacity-60 md:text-xl'
+            className='mx-auto mb-8 max-w-2xl text-lg text-foreground/60 md:text-xl'
           >
             Photography · Equipment Rentals · Studio Spaces · Podcast Production
           </motion.p>
@@ -114,15 +114,15 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 0.6 }}
             className='flex items-center justify-center gap-4'
           >
-            <span className='flex items-center gap-2 text-sm text-[rgba(229,221,200,0.50)]'>
+            <span className='flex items-center gap-2 text-sm text-foreground/50'>
               <span className='relative flex h-2 w-2'>
                 <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60' />
                 <span className='relative inline-flex h-2 w-2 rounded-full bg-emerald-500' />
               </span>
               Available Now
             </span>
-            <span className='text-[rgba(194,178,128,0.25)]'>•</span>
-            <span className='text-sm text-[rgba(229,221,200,0.50)]'>
+            <span className='text-primary/25'>•</span>
+            <span className='text-sm text-foreground/50'>
               Coimbatore, India
             </span>
           </motion.div>
@@ -133,7 +133,7 @@ export default function HomePage() {
       <section className='container mx-auto px-6 py-24'>
         <FadeIn>
           <div className='mb-4 text-center'>
-            <p className='mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#C2B280] opacity-80'>
+            <p className='mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary opacity-80'>
               What We Offer
             </p>
             <h2 className='text-4xl font-bold text-white'>Our Services</h2>

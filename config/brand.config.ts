@@ -129,9 +129,9 @@ export const brandConfig: BrandConfig = {
   url: 'https://wanderingkite.in',
 
   colors: {
-    // Primary: gold
-    primary: '42 35% 63%',
-    primaryForeground: '240 6% 4%',
+    // Primary: electric blue
+    primary: '217 91% 60%',
+    primaryForeground: '0 0% 100%',
 
     // Secondary: navy surface
     secondary: '240 8% 10%',
@@ -139,11 +139,11 @@ export const brandConfig: BrandConfig = {
 
     // Accent: matches secondary (used for hover states)
     accent: '240 8% 10%',
-    accentForeground: '42 35% 63%',
+    accentForeground: '217 91% 60%',
 
     // Muted
     muted: '240 8% 10%',
-    mutedForeground: '35 35% 73%',
+    mutedForeground: '215 20% 65%',
 
     // Neutral
     neutral: '240 6% 15%',
@@ -178,14 +178,14 @@ export const brandConfig: BrandConfig = {
     // Form
     border: '240 8% 14%',
     input: '240 8% 14%',
-    ring: '42 35% 63%',
+    ring: '217 91% 60%',
 
     // Charts
-    chart1: '42 35% 63%',
+    chart1: '217 91% 60%',
     chart2: '230 25% 41%',
-    chart3: '35 46% 82%',
+    chart3: '210 40% 70%',
     chart4: '230 25% 55%',
-    chart5: '42 45% 70%',
+    chart5: '217 91% 70%',
   },
 
   radius: {

@@ -24,14 +24,13 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, History, CheckCircle, Clock } from 'lucide-react';
 
 interface AssignmentHistoryPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function EquipmentAssignmentHistoryPage({
   params,
 }: AssignmentHistoryPageProps) {
-  const { id } =
-    (await (params as unknown as Promise<{ id: string }>)) ?? params;
+  const { id } = await params;
 
   const [equipment, history] = await Promise.all([
     getEquipmentById(id).catch(() => null),

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { MainNav } from '@/components/navigation/MainNav';
 import { BookingFlyout } from '@/components/booking/BookingFlyout';
+import { brandConfig } from '@/config/brand.config';
 import { siteConfig } from '@/config/site';
 
 const inter = Inter({
@@ -12,10 +13,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
+    default: brandConfig.name,
+    template: `%s | ${brandConfig.name}`,
   },
-  description: siteConfig.description,
+  description: brandConfig.description,
   keywords: [
     // Local SEO - Service + City
     'podcast studio Coimbatore',
@@ -39,33 +40,33 @@ export const metadata: Metadata = {
     'podcast production Coimbatore',
     'video studio rental',
   ],
-  authors: [{ name: siteConfig.name }],
+  authors: [{ name: brandConfig.name }],
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: siteConfig.name,
-    description: siteConfig.description,
+    url: brandConfig.url,
+    siteName: brandConfig.name,
+    title: brandConfig.name,
+    description: brandConfig.description,
     images: [
       {
-        url: siteConfig.ogImage,
+        url: brandConfig.assets.ogImage,
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} - Creative Infrastructure for Modern Creators`,
+        alt: `${brandConfig.name} - Creative Infrastructure for Modern Creators`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
+    title: brandConfig.name,
+    description: brandConfig.description,
+    images: [brandConfig.assets.ogImage],
   },
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: 'any' },
+      { url: brandConfig.assets.favicon, sizes: 'any' },
     ],
     apple: '/apple-icon.png',
   },

@@ -49,3 +49,26 @@ export const branchSchema = z.object({
 });
 
 export type BranchFormData = z.infer<typeof branchSchema>;
+
+// Equipment Assignment Validation (Field Operations / Triad View)
+export const assignmentSchema = z.object({
+  equipmentId: z.string().uuid('Invalid equipment ID'),
+  employeeId: z.string().uuid('Invalid employee ID'),
+  clientId: z.string().uuid('Invalid client ID').optional(),
+  expectedReturn: z
+    .string()
+    .datetime({ message: 'Invalid date format' })
+    .optional(),
+  location: z.string().min(1).max(255).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+export type AssignmentFormData = z.infer<typeof assignmentSchema>;
+
+// Quick Return — minimal schema (just needs the UUID)
+export const quickReturnSchema = z.object({
+  assignmentId: z.string().uuid('Invalid assignment ID'),
+  notes: z.string().max(500).optional(),
+});
+
+export type QuickReturnFormData = z.infer<typeof quickReturnSchema>;

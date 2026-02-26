@@ -59,6 +59,12 @@ export default async function DashboardLayout({
                 profile?.role === 'SUPER_ADMIN') && (
                 <>
                   <a
+                    href='/dashboard/deployments'
+                    className='block px-4 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-primary hover:bg-primary/8 transition-all duration-150'
+                  >
+                    Field Ops
+                  </a>
+                  <a
                     href='/dashboard/categories'
                     className='block px-4 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-primary hover:bg-primary/8 transition-all duration-150'
                   >

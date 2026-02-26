@@ -58,18 +58,19 @@ export function ServiceCard({
         ref={cardRef}
         className='
           relative flex h-full flex-col overflow-hidden rounded-2xl
-          border border-[rgba(194,178,128,0.15)]
+          border border-primary/15
           bg-[rgba(17,17,22,0.80)] backdrop-blur-md
           transition-all duration-300 ease-out
-          group-hover:border-[rgba(194,178,128,0.42)]
-          group-hover:shadow-[0_20px_60px_rgba(194,178,128,0.22),0_0_0_1px_rgba(194,178,128,0.10)]
+          group-hover:border-primary/42
+          group-hover:shadow-[0_20px_60px_var(--tw-shadow-color)]
+          group-hover:[--tw-shadow-color:hsl(var(--primary)/0.22)]
         '
       >
         {/* Top shimmer line on hover */}
         <div
           className='
           absolute inset-x-0 top-0 h-px z-10
-          bg-gradient-to-r from-transparent via-[#C2B280] to-transparent
+          bg-gradient-to-r from-transparent via-primary to-transparent
           opacity-0 transition-opacity duration-500 group-hover:opacity-50
         '
         />
@@ -87,9 +88,9 @@ export function ServiceCard({
           {badge && (
             <span
               className='
-              mb-4 self-start rounded-full border border-[rgba(194,178,128,0.28)]
-              bg-[rgba(194,178,128,0.10)] px-3 py-1
-              text-[10px] font-semibold uppercase tracking-[0.18em] text-[#C2B280]
+              mb-4 self-start rounded-full border border-primary/28
+              bg-primary/10 px-3 py-1
+              text-[10px] font-semibold uppercase tracking-[0.18em] text-primary
             '
             >
               {badge}
@@ -100,22 +101,22 @@ export function ServiceCard({
           <div
             className='
             mb-5 flex h-12 w-12 items-center justify-center rounded-xl
-            border border-[rgba(194,178,128,0.18)] bg-[rgba(194,178,128,0.08)]
+            border border-primary/18 bg-primary/8
             transition-all duration-300
-            group-hover:border-[rgba(194,178,128,0.40)]
-            group-hover:bg-[rgba(194,178,128,0.16)]
-            group-hover:shadow-[0_0_20px_rgba(194,178,128,0.18)]
+            group-hover:border-primary/40
+            group-hover:bg-primary/16
+            group-hover:shadow-[0_0_20px_hsl(var(--primary)/0.18)]
           '
           >
             <Icon
-              className='h-5 w-5 text-[#C2B280] transition-transform duration-300 group-hover:scale-110'
+              className='h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110'
               strokeWidth={1.5}
             />
           </div>
 
           {/* Tagline */}
           {tagline && (
-            <p className='mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#C2B280] opacity-75'>
+            <p className='mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary opacity-75'>
               {tagline}
             </p>
           )}
@@ -131,7 +132,7 @@ export function ServiceCard({
           </h3>
 
           {/* Description */}
-          <p className='mb-5 flex-1 text-sm leading-relaxed text-[#E5DDC8] opacity-65'>
+          <p className='mb-5 flex-1 text-sm leading-relaxed text-foreground/65'>
             {description}
           </p>
 
@@ -141,9 +142,9 @@ export function ServiceCard({
               {features.map((f) => (
                 <li
                   key={f}
-                  className='flex items-center gap-2.5 text-xs text-[rgba(229,221,200,0.60)]'
+                  className='flex items-center gap-2.5 text-xs text-foreground/60'
                 >
-                  <span className='h-1 w-1 flex-shrink-0 rounded-full bg-[#C2B280] opacity-70' />
+                  <span className='h-1 w-1 flex-shrink-0 rounded-full bg-primary opacity-70' />
                   {f}
                 </li>
               ))}
@@ -151,17 +152,17 @@ export function ServiceCard({
           )}
 
           {/* CTA */}
-          <div className='mt-auto border-t border-[rgba(194,178,128,0.10)] pt-5'>
+          <div className='mt-auto border-t border-primary/10 pt-5'>
             <Link
               href={href}
               className='
                 group/btn inline-flex items-center gap-2 rounded-xl
-                border border-[rgba(194,178,128,0.28)] bg-[rgba(194,178,128,0.06)]
-                px-5 py-2.5 text-sm font-medium text-[#C2B280]
+                border border-primary/28 bg-primary/6
+                px-5 py-2.5 text-sm font-medium text-primary
                 transition-all duration-200
-                hover:border-[rgba(194,178,128,0.55)] hover:bg-[rgba(194,178,128,0.16)]
-                hover:text-white hover:shadow-[0_0_16px_rgba(194,178,128,0.20)]
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2B280] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
+                hover:border-primary/55 hover:bg-primary/16
+                hover:text-white hover:shadow-[0_0_16px_hsl(var(--primary)/0.20)]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
               '
             >
               Explore

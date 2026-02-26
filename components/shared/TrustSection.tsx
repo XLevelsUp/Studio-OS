@@ -1,11 +1,11 @@
 export function TrustSection() {
   return (
-    <section className='border-y border-[rgba(194,178,128,0.10)] py-16'>
+    <section className='border-y border-primary/10 py-16'>
       <div className='container mx-auto px-6'>
         <div className='grid gap-12 md:grid-cols-3'>
           {/* Trusted By */}
           <div>
-            <h3 className='mb-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C2B280] opacity-75'>
+            <h3 className='mb-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary opacity-75'>
               Trusted By
             </h3>
             <div className='flex flex-wrap gap-3'>
@@ -13,9 +13,9 @@ export function TrustSection() {
                 <div
                   key={label}
                   className='
-                    rounded-xl border border-[rgba(194,178,128,0.15)]
-                    bg-[rgba(194,178,128,0.06)]
-                    px-5 py-2.5 text-sm font-medium text-[#E5DDC8] opacity-75
+                    rounded-xl border border-primary/15
+                    bg-primary/6
+                    px-5 py-2.5 text-sm font-medium text-foreground/75
                   '
                 >
                   {label}
@@ -26,23 +26,21 @@ export function TrustSection() {
 
           {/* Google Reviews */}
           <div>
-            <h3 className='mb-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C2B280] opacity-75'>
+            <h3 className='mb-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary opacity-75'>
               Client Reviews
             </h3>
             <div className='flex items-center gap-4'>
               <span className='text-4xl font-bold text-white'>4.9</span>
               <div>
-                <div className='text-lg text-[#C2B280]'>★★★★★</div>
-                <p className='text-sm text-[#E5DDC8] opacity-55'>
-                  Google Reviews
-                </p>
+                <div className='text-lg text-primary'>★★★★★</div>
+                <p className='text-sm text-foreground/55'>Google Reviews</p>
               </div>
             </div>
           </div>
 
           {/* Premium Gear */}
           <div>
-            <h3 className='mb-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C2B280] opacity-75'>
+            <h3 className='mb-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary opacity-75'>
               Premium Gear
             </h3>
             <div className='flex flex-wrap gap-2'>
@@ -50,11 +48,11 @@ export function TrustSection() {
                 <span
                   key={brand}
                   className='
-                    rounded-full border border-[rgba(194,178,128,0.20)]
-                    bg-[rgba(194,178,128,0.07)]
-                    px-4 py-1.5 text-sm text-[#E5DDC8] opacity-75
+                    rounded-full border border-primary/20
+                    bg-primary/7
+                    px-4 py-1.5 text-sm text-foreground/75
                     transition-all duration-200
-                    hover:border-[rgba(194,178,128,0.40)] hover:opacity-100 hover:text-[#C2B280]
+                    hover:border-primary/40 hover:opacity-100 hover:text-primary
                   '
                 >
                   {brand}

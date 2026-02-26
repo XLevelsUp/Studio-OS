@@ -24,6 +24,71 @@ export async function getEquipment() {
   return data;
 }
 
+/**
+ * Enriched equipment list for the listing page.
+ * Left-joins the active equipment_assignment (returnedAt IS NULL) to surface
+ * live field status: who holds the gear + for which client.
+ *
+ * Uses a nested PostgREST select — the inner filter `returnedAt.is.null` is
+ * applied on the join side so we never pull historical assignments.
+ */
+export async function getEquipmentWithFieldStatus() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('equipment')
+    .select(
+      `
+      id,
+      name,
+      serialNumber,
+      status,
+      rentalPrice,
+      description,
+      deletedAt,
+      categories(name),
+      branches(name),
+      activeAssignment:equipment_assignments!equipmentId(
+        id,
+        status,
+        assignedAt,
+        expectedReturn,
+        location,
+        employee:"employeeId"(id, fullName, email),
+        client:"clientId"(id, name, phone)
+      )
+      `,
+    )
+    .is('deletedAt', null)
+    .order('createdAt', { ascending: false });
+
+  if (error) {
+    throw new Error(
+      `Failed to fetch equipment with field status: ${error.message}`,
+    );
+  }
+
+  // PostgREST returns the join as an array — flatten to single active assignment
+  return (data ?? []).map((item) => {
+    type AssignmentRow = {
+      id: string;
+      status: string;
+      assignedAt: string;
+      expectedReturn: string | null;
+      location: string | null;
+      employee: { id: string; fullName: string | null; email: string } | null;
+      client: { id: string; name: string; phone: string | null } | null;
+    };
+    const assignments =
+      (item.activeAssignment as unknown as AssignmentRow[]) ?? [];
+    const active =
+      assignments.find(
+        (a) => a.status === 'in_field' || a.status === 'maintenance',
+      ) ?? null;
+    return { ...item, activeAssignment: active };
+  });
+}
+
 // Get equipment by ID
 export async function getEquipmentById(id: string) {
   const supabase = await createClient();

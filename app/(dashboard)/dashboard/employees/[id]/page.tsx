@@ -4,9 +4,9 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
 interface EmployeePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EmployeePage(props: EmployeePageProps) {

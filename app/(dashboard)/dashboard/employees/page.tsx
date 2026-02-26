@@ -37,21 +37,44 @@ export default async function EmployeesPage() {
     profile?.role === 'SUPER_ADMIN' || profile?.role === 'ADMIN';
 
   return (
-    <div className='flex-1 space-y-4 p-8 pt-6'>
-      <div className='flex items-center justify-between space-y-2'>
-        <h2 className='text-3xl font-bold tracking-tight'>Employees</h2>
+    <div className='flex-1 space-y-6 p-8 pt-6'>
+      <div className='flex items-center justify-between'>
+        <div>
+          <p className='text-[10px] font-semibold uppercase tracking-[0.22em] text-primary opacity-75 mb-1'>
+            Team Management
+          </p>
+          <h2 className='text-3xl font-bold tracking-tight text-white'>
+            Employees
+          </h2>
+        </div>
         <div className='flex items-center space-x-2'>
           {canManage && (
             <Link href='/dashboard/employees/new'>
-              <Button>
-                <Plus className='mr-2 h-4 w-4' /> Add Employee
-              </Button>
+              <button
+                className='
+                flex items-center gap-2 rounded-xl
+                border border-primary/35
+                bg-primary/8
+                px-5 py-2.5 text-sm font-semibold text-primary
+                transition-all duration-200
+                hover:bg-primary/18 hover:border-primary/60
+                hover:text-white hover:shadow-[0_0_16px_hsl(var(--primary)/0.20)]
+              '
+              >
+                <Plus className='h-4 w-4' /> Add Employee
+              </button>
             </Link>
           )}
         </div>
       </div>
-      <div className='hidden h-full flex-1 flex-col space-y-8 md:flex'>
-        <Suspense fallback={<div>Loading employees...</div>}>
+      <div className='h-full flex-1 flex-col space-y-8 flex'>
+        <Suspense
+          fallback={
+            <div className='text-foreground/50 py-8 text-center'>
+              Loading employees…
+            </div>
+          }
+        >
           <EmployeeTable
             employees={employees || []}
             currentUserRole={profile?.role || 'EMPLOYEE'}

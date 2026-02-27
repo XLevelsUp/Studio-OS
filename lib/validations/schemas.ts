@@ -72,3 +72,35 @@ export const quickReturnSchema = z.object({
 });
 
 export type QuickReturnFormData = z.infer<typeof quickReturnSchema>;
+
+// Studio Event
+export const STUDIO_LOCATIONS = [
+  'Studio A',
+  'Studio B',
+  'Podcast Room',
+  'Outdoor',
+  'Other',
+] as const;
+
+export type StudioLocation = (typeof STUDIO_LOCATIONS)[number];
+
+export const createEventSchema = z.object({
+  title: z.string().min(2, 'Title must be at least 2 characters.'),
+  date: z.string().min(1, 'Date is required.'), // "YYYY-MM-DD"
+  startHour: z.string().regex(/^\d+$/, 'Invalid hour'),
+  startMinute: z.string().regex(/^\d+$/, 'Invalid minute'),
+  durationHours: z
+    .string()
+    .min(1, 'Duration is required.')
+    .refine((v) => !isNaN(Number(v)) && Number(v) > 0 && Number(v) <= 24, {
+      message: 'Duration must be between 0 and 24 hours.',
+    }),
+  location: z.enum(STUDIO_LOCATIONS, {
+    error: 'Please select a valid location.',
+  }),
+  clientId: z.string().uuid().optional().or(z.literal('')),
+  equipmentIds: z.array(z.string().uuid()).default([]),
+  description: z.string().max(1000).optional(),
+});
+
+export type EventFormData = z.infer<typeof createEventSchema>;

@@ -46,6 +46,8 @@ export default async function DashboardLayout({
                 { href: '/dashboard/clients', label: 'Clients' },
                 { href: '/dashboard/rentals', label: 'Rentals' },
                 { href: '/dashboard/employees', label: 'Employees' },
+                { href: '/dashboard/attendance', label: 'Attendance' },
+                { href: '/dashboard/events', label: 'Events' },
               ].map((item) => (
                 <a
                   key={item.href}

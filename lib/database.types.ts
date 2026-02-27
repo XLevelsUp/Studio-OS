@@ -168,17 +168,29 @@ export interface Database {
           id: string;
           email: string;
           full_name: string | null;
-          role: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF';
+          fullName: string | null;
+          role: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF' | 'EMPLOYEE';
           branch_id: string | null;
+          branchId: string | null;
+          managerId: string | null;
+          hourlyRate: number;
+          currency: string;
           created_at: string;
           updated_at: string;
+          createdAt: string;
+          updatedAt: string;
         };
         Insert: {
           id: string;
           email: string;
           full_name?: string | null;
-          role?: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF';
+          fullName?: string | null;
+          role?: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF' | 'EMPLOYEE';
           branch_id?: string | null;
+          branchId?: string | null;
+          managerId?: string | null;
+          hourlyRate?: number;
+          currency?: string;
           created_at?: string;
           updated_at?: string;
         };
@@ -186,10 +198,44 @@ export interface Database {
           id?: string;
           email?: string;
           full_name?: string | null;
-          role?: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF';
+          fullName?: string | null;
+          role?: 'SUPER_ADMIN' | 'ADMIN' | 'STAFF' | 'EMPLOYEE';
           branch_id?: string | null;
+          branchId?: string | null;
+          managerId?: string | null;
+          hourlyRate?: number;
+          currency?: string;
           created_at?: string;
           updated_at?: string;
+        };
+      };
+      attendance_logs: {
+        Row: {
+          id: string;
+          userId: string;
+          clockIn: string;
+          clockOut: string | null;
+          totalHours: number | null;
+          createdAt: string;
+          updatedAt: string;
+        };
+        Insert: {
+          id?: string;
+          userId: string;
+          clockIn: string;
+          clockOut?: string | null;
+          totalHours?: number | null;
+          createdAt?: string;
+          updatedAt?: string;
+        };
+        Update: {
+          id?: string;
+          userId?: string;
+          clockIn?: string;
+          clockOut?: string | null;
+          totalHours?: number | null;
+          createdAt?: string;
+          updatedAt?: string;
         };
       };
       rental_items: {
@@ -256,6 +302,65 @@ export interface Database {
           updated_at?: string;
         };
       };
+      studio_events: {
+        Row: {
+          id: string;
+          userId: string;
+          clientId: string | null;
+          title: string;
+          description: string | null;
+          startTime: string;
+          endTime: string;
+          location: string;
+          status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+          createdAt: string;
+          updatedAt: string;
+        };
+        Insert: {
+          id?: string;
+          userId: string;
+          clientId?: string | null;
+          title: string;
+          description?: string | null;
+          startTime: string;
+          endTime: string;
+          location?: string;
+          status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+          createdAt?: string;
+          updatedAt?: string;
+        };
+        Update: {
+          id?: string;
+          userId?: string;
+          clientId?: string | null;
+          title?: string;
+          description?: string | null;
+          startTime?: string;
+          endTime?: string;
+          location?: string;
+          status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+          updatedAt?: string;
+        };
+      };
+      event_equipment: {
+        Row: {
+          id: string;
+          eventId: string;
+          equipmentId: string;
+          createdAt: string;
+        };
+        Insert: {
+          id?: string;
+          eventId: string;
+          equipmentId: string;
+          createdAt?: string;
+        };
+        Update: {
+          id?: string;
+          eventId?: string;
+          equipmentId?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;
@@ -277,6 +382,7 @@ export interface Database {
         | 'COMPLETED'
         | 'CANCELLED'
         | 'OVERDUE';
+      event_status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
     };
   };
 }

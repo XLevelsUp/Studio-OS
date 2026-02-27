@@ -33,6 +33,10 @@ model User {
   email         String    @unique
   fullName      String?
   role          UserRole  @default(EMPLOYEE)
+
+  // Payroll fields
+  hourlyRate    Decimal   @default(0.00) @db.Decimal(10, 2)
+  currency      String    @default("USD")
   
   // Self-relation: Manager -> Subordinates
   managerId     String?
@@ -42,6 +46,9 @@ model User {
   // Relationships to Orders
   assignedOrders Order[]  @relation("AssignedEmployee")
   supervisedOrders Order[] @relation("Supervisor")
+
+  // Attendance
+  attendanceLogs AttendanceLog[] @relation("UserAttendance")
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -118,4 +125,19 @@ model OrderItem {
   createdAt     DateTime  @default(now())
 
   @@map("order_items")
+}
+
+model AttendanceLog {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation("UserAttendance", fields: [userId], references: [id], onDelete: Cascade)
+  clockIn     DateTime
+  clockOut    DateTime?
+  totalHours  Decimal?  @db.Decimal(8, 4)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // NOTE: The partial unique index (one active session per user) is enforced
+  // via a raw SQL migration: CREATE UNIQUE INDEX ... WHERE "clockOut" IS NULL
+  @@map("attendance_logs")
 }

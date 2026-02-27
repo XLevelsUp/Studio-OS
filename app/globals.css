@@ -113,6 +113,26 @@
     color: inherit;
     text-decoration: none;
   }
+
+  /* ── Native <select> / <option> dark mode fix ───────────────────────────
+     Browser dropdown popovers inherit from <option> bg/color.
+     color-scheme: dark tells Chrome/Firefox to render the popover dark. */
+  select {
+    color-scheme: dark;
+    background-color: hsl(240 8% 10%);
+    color: hsl(0 0% 93%);
+  }
+
+  option {
+    background-color: hsl(240 8% 10%);
+    color: hsl(0 0% 93%);
+  }
+
+  option:checked,
+  option:hover {
+    background-color: hsl(217 91% 60% / 0.25);
+    color: hsl(0 0% 100%);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
